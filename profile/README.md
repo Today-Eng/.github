@@ -2,15 +2,16 @@
 
 # TodayEng
 
-### 오늘의 나를 아는 질문으로 시작하는 영어 스피킹
+<img width=100% alt="main" src="https://github.com/user-attachments/assets/9a1bc222-ac5c-4c6d-87e0-81b49e812ef8" />
 
-오늘의 질문에 영어로 답하면, 나만의 영어 회고록 한 편이 완성됩니다.
 
 <br/>
 
 <img width=100% alt="preview" src="https://github.com/user-attachments/assets/fddb511d-3b22-4fa0-b2bc-63554545abcc" />
 
+### 오늘의 나를 아는 질문으로 시작하는 영어 스피킹
 
+오늘의 질문에 영어로 답하면, 나만의 영어 회고록 한 편이 완성됩니다.
 
 <br/>
 
@@ -21,6 +22,7 @@
   <img src="https://img.shields.io/badge/Demo-Watch_Video-FF0000?style=for-the-badge&logo=youtube&logoColor=white"/>
 </a>
 
+<br/>
 
 </div>
 
