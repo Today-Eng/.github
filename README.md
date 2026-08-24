@@ -236,11 +236,11 @@ Frontend는 Vercel을 통해 배포하며, Backend는 Google Compute Engine의 *
 <img width=100% alt="highlights-1" src="https://github.com/user-attachments/assets/c683502e-7a87-4a9b-8351-417b954469c5" />
 
 
-서로 다른 형태와 출처를 가진 사용자 데이터를 내부의 공통 `DiaryContext` 모델로 통합하여 질문 생성 계층에서 동일한 Context 단위로 활용합니다.
+- 서로 다른 형태와 출처를 가진 사용자 데이터를 내부의 공통 `DiaryContext` 모델로 통합하여 질문 생성 계층에서 동일한 Context 단위로 활용합니다.
 
-당일 최초 접속 시 오늘의 데이터를 사전 수집하고 실제 회고 시작 직전에 다시 최신화하는 **2단계 Context 수집 구조**를 적용하여 불필요한 외부 API 호출을 줄이면서도 질문 생성 시점의 최신성을 확보했습니다.
+- 당일 최초 접속 시 오늘의 데이터를 사전 수집하고 실제 회고 시작 직전에 다시 최신화하는 **2단계 Context 수집 구조**를 적용하여 불필요한 외부 API 호출을 줄이면서도 질문 생성 시점의 최신성을 확보했습니다.
 
-각 외부 Context Provider는 독립적으로 처리하여 일부 외부 서비스가 실패하더라도 정상적으로 확보된 Context만으로 회고를 계속할 수 있도록 구성했습니다.
+- 각 외부 Context Provider는 독립적으로 처리하여 일부 외부 서비스가 실패하더라도 정상적으로 확보된 Context만으로 회고를 계속할 수 있도록 구성했습니다.
 
 <br/>
 
@@ -248,11 +248,11 @@ Frontend는 Vercel을 통해 배포하며, Backend는 Google Compute Engine의 *
 
 <img width=100% alt="highlights-2" src="https://github.com/user-attachments/assets/4b9598b0-c98c-42fb-b436-bb6a050469d7" />
 
-과거 회고 원문을 계속 LLM에 누적하는 대신 반복되는 사람·장소·활동·관심 주제와 최근 감정 등을 구조화한 `DIARY_MEMORY`로 변환하여 다음 질문 생성에 재사용합니다.
+- 과거 회고 원문을 계속 LLM에 누적하는 대신 반복되는 사람·장소·활동·관심 주제와 최근 감정 등을 구조화한 `DIARY_MEMORY`로 변환하여 다음 질문 생성에 재사용합니다.
 
-Memory가 참조하는 원본 회고를 `sourceDiaryIds`로 함께 관리하고 서버에서 실제 입력 회고와의 관계를 검증하여 생성형 AI가 존재하지 않는 출처를 생성하는 것을 방지했습니다.
+- Memory가 참조하는 원본 회고를 `sourceDiaryIds`로 함께 관리하고 서버에서 실제 입력 회고와의 관계를 검증하여 생성형 AI가 존재하지 않는 출처를 생성하는 것을 방지했습니다.
 
-후보 회고 수에 따른 Token·응답 시간·유효 기억 수를 직접 비교한 결과를 바탕으로 **최근 30일 내 최대 10개의 완료 회고**를 기본 후보 상한으로 결정했습니다.
+- 후보 회고 수에 따른 Token·응답 시간·유효 기억 수를 직접 비교한 결과를 바탕으로 **최근 30일 내 최대 10개의 완료 회고**를 기본 후보 상한으로 결정했습니다.
 
 <br/>
 
@@ -260,19 +260,12 @@ Memory가 참조하는 원본 회고를 `sourceDiaryIds`로 함께 관리하고 
 
 <img width=100% alt="highlights-3" src="https://github.com/user-attachments/assets/51b04ea9-e03e-43a8-8c8b-642dafbf6ab1" />
 
-음성 답변 이후 수행되는
+- 음성 답변 이후 수행되는 **STT → AI Correction → Follow-up Question → TTS** 작업을 업로드 HTTP 요청과 분리된 비동기 파이프라인으로 처리합니다.
 
-**STT → AI Correction → Follow-up Question → TTS**
-
-작업을 업로드 HTTP 요청과 분리된 비동기 파이프라인으로 처리합니다.
-
-클라이언트는 SSE를 구독하고 서버는 처리 단계별로
-
-`answer.transcribed` · `answer.corrected` · `question.ready` · `follow-up.ready` · `ready-to-complete`
-
+- 클라이언트는 SSE를 구독하고 서버는 처리 단계별로 `answer.transcribed` · `answer.corrected` · `question.ready` · `follow-up.ready` · `ready-to-complete` 
 이벤트를 전달하여 사용자가 결과를 순차적으로 확인할 수 있도록 구성했습니다.
 
-처리 실패 시 `processing_failed` 이벤트를 전달하고, 일부 AI 처리 실패 상황에서는 기본 후속 질문을 사용하여 회고 흐름이 가능한 한 중단되지 않도록 처리합니다.
+- 처리 실패 시 `processing_failed` 이벤트를 전달하고, 일부 AI 처리 실패 상황에서는 기본 후속 질문을 사용하여 회고 흐름이 가능한 한 중단되지 않도록 처리합니다.
 
 <br/>
 
@@ -280,14 +273,13 @@ Memory가 참조하는 원본 회고를 `sourceDiaryIds`로 함께 관리하고 
 
 <img width=100% alt="highlights-4" src="https://github.com/user-attachments/assets/caa2d19d-189a-41f1-8c9c-0ea1b9e3e3f6" />
 
+- Google Compute Engine의 **Blue / Green 두 환경과 GCP Load Balancer**를 이용해 신규 버전을 비활성 환경에 먼저 배포하고 Health Check 이후에만 트래픽을 전환합니다.
 
-Google Compute Engine의 **Blue / Green 두 환경과 GCP Load Balancer**를 이용해 신규 버전을 비활성 환경에 먼저 배포하고 Health Check 이후에만 트래픽을 전환합니다.
+- Docker 이미지는 `latest` 대신 **Git Commit SHA**를 배포 단위로 사용하며, 전환 이후 문제가 발생하면 기존 정상 환경으로 트래픽을 다시 전환할 수 있도록 롤백 흐름을 구성했습니다.
 
-Docker 이미지는 `latest` 대신 **Git Commit SHA**를 배포 단위로 사용하며, 전환 이후 문제가 발생하면 기존 정상 환경으로 트래픽을 다시 전환할 수 있도록 롤백 흐름을 구성했습니다.
+- Blue / Green 두 인스턴스에서 동일한 Scheduler가 동시에 실행되며 Web Push가 중복 발송되는 문제에는 **ShedLock + MySQL Distributed Lock**을 적용하여 하나의 인스턴스만 작업을 수행하도록 제어했습니다.
 
-Blue / Green 두 인스턴스에서 동일한 Scheduler가 동시에 실행되며 Web Push가 중복 발송되는 문제에는 **ShedLock + MySQL Distributed Lock**을 적용하여 하나의 인스턴스만 작업을 수행하도록 제어했습니다.
-
-두 VM의 운영 로그는 **Google Cloud Logging**으로 중앙화하여 서버별 로그와 Scheduler·Web Push 실행 결과를 Logs Explorer에서 추적할 수 있도록 구성했습니다.
+- 두 VM의 운영 로그는 **Google Cloud Logging**으로 중앙화하여 서버별 로그와 Scheduler·Web Push 실행 결과를 Logs Explorer에서 추적할 수 있도록 구성했습니다.
 
 <br/>
 
